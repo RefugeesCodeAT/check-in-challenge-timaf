@@ -86,7 +86,9 @@ void add_one(string participant_name)
 {
     printf("add %s\n", participant_name);
 
-    // TODO
+    PARTICIPANT* newParticipant = malloc(sizeof( PARTICIPANT));
+    participants = newParticipant->next
+    newParticipant->name = get_string("NAME: ");
 }
 
 /*
