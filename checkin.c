@@ -49,9 +49,11 @@ bool perform(string user_input)
 {
     // Read the string of user input into two variables
     string action_name = strtok(user_input, " ");
-    string participant_name = strtok(NULL, " ");
+     string participant_name = strtok(NULL, " ");
+     if(action_name == NULL)
+     return false;
 
-    if(strcmp(action_name, "add") == 0)
+    if(strcmp(action_name, "add") == 0 )
     {
         add_one(participant_name);
         return true;
@@ -66,7 +68,7 @@ bool perform(string user_input)
         check_one(participant_name);
         return true;
     }
-    if(strcmp(action_name, "display") == 0)
+    if(strcmp(action_name, "display") == 0 )
     {
        display_participants();
        return true;
@@ -87,8 +89,25 @@ void add_one(string participant_name)
     printf("add %s\n", participant_name);
 
     PARTICIPANT* newParticipant = malloc(sizeof( PARTICIPANT));
-    participants = newParticipant->next
-    newParticipant->name = get_string("NAME: ");
+
+     newParticipant->name = participant_name;
+     newParticipant->checked_in = CHECKED_IN;
+     newParticipant->next = NULL;
+     if(participants)
+       {
+             for ( PARTICIPANT *temParticipant = participants; temParticipant != NULL; temParticipant = temParticipant->next)
+                {
+                    if (!temParticipant->next)
+                    {
+                       temParticipant->next = newParticipant;
+                       break;
+                    }
+                }
+        }
+        else
+        {
+            participants = newParticipant;
+        }
 }
 
 /*
@@ -98,7 +117,31 @@ void remove_one(string participant_name)
 {
     printf("remove %s\n", participant_name);
 
-    // TODO
+
+
+     PARTICIPANT *temParticipant = participants;
+   while (temParticipant != NULL)
+   {
+        PARTICIPANT *prevParticipant =temParticipant;
+       if (strcmp (temParticipant->name,participant_name) == 0)
+          {
+              if(prevParticipant == temParticipant)
+              {
+                participants = temParticipant->next;
+                 free(temParticipant);
+                 break;
+              }
+              else
+              {
+                prevParticipant->next =temParticipant->next;
+                free(temParticipant);
+                break;
+              }
+
+   temParticipant = temParticipant->next;
+
+    }
+}
 }
 
 /*
@@ -108,7 +151,15 @@ void check_one(string participant_name)
 {
     printf("check %s\n", participant_name);
 
-    // TODO
+    for (PARTICIPANT *temParticipant = participants; temParticipant != NULL; temParticipant = temParticipant->next)
+        {
+
+                    if (strcmp (temParticipant->name,participant_name) == 0)
+                    {
+                    temParticipant->checked_in = !(temParticipant->checked_in);
+                     printf(" status%i\n", temParticipant->checked_in);
+                    }
+        }
 }
 
 /*
@@ -118,7 +169,12 @@ void display_participants()
 {
     printf("display\n");
 
-    // TODO
+    for ( PARTICIPANT *temParticipant = participants; temParticipant != NULL; temParticipant = temParticipant->next)
+    {
+        printf("%s\n", temParticipant-> name);
+         printf(" status%i\n", temParticipant->checked_in);
+    }
+
 }
 
 /*
@@ -128,5 +184,20 @@ void free_memory()
 {
     printf("freeing stuff.\n");
 
-    // TODO
+   PARTICIPANT *temParticipant = participants;
+   while (temParticipant != NULL)
+   {
+    PARTICIPANT *theNextParticipant =temParticipant->next;
+    free(temParticipant);
+   temParticipant = theNextParticipant;
+
+   }
 }
+
+
+
+
+
+
+
+
