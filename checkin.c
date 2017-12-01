@@ -95,16 +95,12 @@ void add_one(string participant_name)
      newParticipant->next = NULL;
      if(participants)
        {
-             for ( PARTICIPANT *temParticipant = participants; temParticipant != NULL; temParticipant = temParticipant->next)
-                {
-                    if (!temParticipant->next)
-                    {
-                       temParticipant->next = newParticipant;
-                       break;
-                    }
-                }
-        }
-        else
+
+            newParticipant->next = participants;
+
+             participants =newParticipant;
+       }
+         else
         {
             participants = newParticipant;
         }
@@ -120,9 +116,10 @@ void remove_one(string participant_name)
 
 
      PARTICIPANT *temParticipant = participants;
+      PARTICIPANT *prevParticipant =participants;
    while (temParticipant != NULL)
    {
-        PARTICIPANT *prevParticipant =temParticipant;
+
        if (strcmp (temParticipant->name,participant_name) == 0)
           {
               if(prevParticipant == temParticipant)
@@ -135,13 +132,14 @@ void remove_one(string participant_name)
               {
                 prevParticipant->next =temParticipant->next;
                 free(temParticipant);
-                break;
+               break;
               }
-
+          }
+    prevParticipant = temParticipant;
    temParticipant = temParticipant->next;
 
     }
-}
+
 }
 
 /*
